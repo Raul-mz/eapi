@@ -1,0 +1,44 @@
+
+
+<?php
+session_start();
+$var="estudiante";
+
+require_once("../class/class.consultas.php");
+$resultado = new conSqlSelect;
+
+$opcion=$_POST["clave"];
+$id=$_POST["usuario"];
+
+
+/******************************/
+ $r_Obt = $resultado->obtDoble("usuario","usuario","contrasena",$id,$opcion);
+
+/******************************/
+/* ************************/
+if (isset($r_Obt[0]['codigo']))
+{//si el cliente esta registrado
+ echo $contrasena = $r_Obt[0]["contrasena"];
+  echo $idcliente = $r_Obt[0]["usuario"];				
+				
+   if ($contrasena == $opcion)
+   {				   
+     //establecermos las variables de sesión
+     $_SESSION["user"] = $r_Obt[0]["usuario"];
+	  $_SESSION["pass"] = $r_Obt[0]["contrasena"];
+ header("Location: ../vista/".$var.".php");
+ }
+?>
+<?php
+}else {
+	?>
+	<?php 
+ header("Location: ../index1.html");	
+}
+
+
+
+?>
+
+</body>
+</html>
