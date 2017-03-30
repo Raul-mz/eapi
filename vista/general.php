@@ -3,15 +3,11 @@
 $pagName="general";
 ?>
 
-<div id="cen" class="container">
-  <div class="row">
+<div id="cen" class="row">
+  <div class="col-xs-12 col-md-10 col-md-offset-1 " id="registro">
 <!--main-->
-<div class="col-md-10 col-md-offset-1 ">
-            
-              <div class="row">
-                <div class="col-sm-12" id="registro">
+
                    <?php include 'c_'.$pagName.'.php';?>
-                </div>
               
               
             </div>

@@ -3,29 +3,27 @@ require_once("../class/class.new.php");
 require_once("../class/class.perfil.php");
 
 $resultado = new conSqlSelect;
-$form = new Table($resultado);
+
+$id=$_REQUEST['ids'];
+$form = new Table($resultado,$id);
 
 $tabla="sgt_field";
-$id=$_GET['ids'];
 $pk=$tabla."_ID";
 $pag="core";
 
 $c_Obt1 = $resultado->obtResultadoW($tabla,'menu_id',$id);
 
 $t_Obt = $resultado->obtResultadoW($tabla,'menu_id',$id);
+if(isset($_REQUEST['id'])){
 
+$cod=$_REQUEST['id'];
+echo "Editando.. Falta Agregar funcionalidad";
+$t_Obt = $resultado->obtResultadoW($tabla,'menu_id',$id);
 
-$c_Obt = $resultado->obtColumna('sgt_perfil');
-/**
- <td>
+}
 
-                                  <input type="hidden" class="form-control" id="campo" value="<?php echo $r_Obt[0]['centralid']?>">
-                                  <input type="text" class="form-control" id="texto" placeholder="" value="<?php echo $r_Obt[0]['central']?>">
-                            
-<h2><p align="center"><?php echo $t_Obt[0]['eTexto'];?></p> </h2>
-                   
-                              </td>*/
 ?>
+ <p ><div class=" r col-md-offset-3"><h2><?php echo $form->getTitle();?></h2></div> </p>
 <!-- Modal Structure -->
   <div id="modal2" class="modal">
     <div id="Resulta" class="modal-content">
@@ -35,23 +33,21 @@ $c_Obt = $resultado->obtColumna('sgt_perfil');
       <a href="#!" onclick="location.reload();" class=" modal-action modal-close waves-effect waves-green btn-flat">Agree</a>
     </div>
   </div>
- <input type="hidden" readonly="true"; value="<?php echo $t_Obt[0]['eTexto'];?>" name="<?php echo $t_Obt[0]['eTexto'];?>" id="title">
-
-                   
-                    <form class="form-inline" onsubmit="registrar('<?php echo $pag;?>','<?php echo $rTabla;?>','<?php echo $rTabla_ID;?>'); return false">
+               
+                   <form name="Formu" class="form-horizontal table-responsive" onsubmit="registrar('<?php echo $pag;?>','<?php echo $form->getTabla();?>','<?php echo $id;?>'); return false">
                       
                       <?php 
-print_r($form->render($resultado));
-echo 's';
+print_r($form->render($id));
+
                       for ($i=0; $i< count($c_Obt1); $i++){ ?>   
                                    
                            <?php
                                       }
                                     ?>
                              
-                         <div  class="input-field col s12">
-                                  <input type="submit" class="btn waves-effect waves-light" value="Continuar"> -
-                                  <button class="btn waves-effect waves-light" onclick="nuevo('c_<?php echo $pag;?>')">Cancelar</button>
+                         <div  class="input-field col s12 text-center">
+                                  <input type="submit" class="btn btn-primary" value="Guardar"> -
+                                  <button class="btn btn-danger" onclick="nuevo('c_<?php echo $pag;?>')">Cancelar</button>
                          </div>
                     </form>
                 </div>
