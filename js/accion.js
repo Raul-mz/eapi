@@ -93,15 +93,14 @@ function detalle(pag, id){
 		ajax.send(null)
 	
 }
-function registrar(pag){
+function registrar(pag,table,ids){
 	var x=(document.forms[0].elements.length)-2;
 			texto=new Array();
 		for(y=0;y<=x;y++){
 		texto[y]=document.forms[0].elements[y].value;
 	}
 	divResultado = document.getElementById('registro');
-	
-	id=document.getElementById('campo').value;
+	id=document.forms[0].elements[0].value;
 	
 		ajax=objetoAjax();
 			ajax.open("POST","../modelo/"+pag+".php",true);
@@ -112,15 +111,15 @@ function registrar(pag){
 		}
 
 		 ajax.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-		ajax.send("texto="+texto+"&num="+x+"&pag="+pag+"&id="+id);
+		ajax.send("texto="+texto+"&num="+x+"&pag="+pag+"&id="+id+"&table="+table+"&ids="+ids);
 
 
 }
-function del_up(tabla,id,pag,accion,col){
+function del_up(tabla,id,pag,accion,col,ids){
 	if(accion==1){
 		var msj="Modificar";
 		var carpeta="vista";
-		var pagina=pag;
+		var pagina='r_'+pag;
 	} else {
 		var msj="Eliminar";
 		var carpeta="modelo";
@@ -141,7 +140,7 @@ function del_up(tabla,id,pag,accion,col){
 		}
 
 		 ajax.setRequestHeader("Content-Type","application/x-www-form-urlencoded");
-		ajax.send("id="+id+"&tabla="+tabla+"&col="+col+"&var="+pag);
+		ajax.send("id="+id+"&tabla="+tabla+"&col="+col+"&var="+pag+"&ids="+ids);
 	}
 
 }
