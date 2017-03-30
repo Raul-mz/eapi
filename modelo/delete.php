@@ -21,6 +21,7 @@ require_once("../class/class.new.php");
 
 //variable GET
 $id=$_POST['id'];
+$ids=$_POST['ids'];
 $col=$_POST['col'];
 $var=$_POST['var'];
 $Tabla=$_POST['tabla'];
@@ -30,7 +31,7 @@ $Tabla=$_POST['tabla'];
 	$delete = $deleteReg->delete($Tabla,$col,$id);
 	//<div id='delete' >Eliminado con Éxito... <a href='../vista/".$var.".php'>Continuar</a></div>";
 
-echo "<div align='center' class='c'>Eliminado con Éxito... <a href='../vista/".$var.".php'>Continuar</a></div>";
+echo "<div align='center' class='c'>Eliminado con Éxito... <a href='../vista/".$var.".php?ids=".$ids."'>Continuar</a></div>";
 ?><p>&nbsp; </p>
 <p>&nbsp; </p>
 </div>

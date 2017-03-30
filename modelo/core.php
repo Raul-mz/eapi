@@ -3,45 +3,50 @@
   <link href="../css/main.css" rel="stylesheet">
 
 <?php 
+
+require_once("../class/class.new.php");
+require_once("../class/class.perfil.php");
 $texto=explode(",",$_POST['texto']);
 $text=$_POST['texto'];
 $num=$_POST['num'];
 $pag=$_POST['pag'];
 $id=$_POST['id'];
+$Tabla=$_POST['table'];
+$ids=$_POST['ids'];
 for($x=0;$x<=$num;$x++)
  $texto[$x];
 
 /** **/
 
-$var="contaminante";
-$Tabla="contaminante";
-// Columnas de la bd. 
-$i=0;
-  $cols[$i++]="id_contaminante";
-  $cols[$i++]="nombre";
-/** Fin **/  
-require_once("../class/class.new.php");
-
-/* Para consultar Personas */
 $datosUsu = new conSqlSelect;
 
+$form = new Table($datosUsu,$ids);
+$var="general";
+// Columnas de la bd. 
+$i=0;
 
+   
+/** Fin **/  
+
+/* Para consultar Personas */
+
+//print_r( $form->getColumnID($ids)->getColumnName());
 
 if($id==""){
-$usuarios_reg = $datosUsu->obtResultadoW($Tabla,'id_contaminante',$texto[1]);
+$usuarios_reg = $datosUsu->obtResultadoW($Tabla,$form->getColumnID($ids)->getColumnName(),$texto[0]);
 /* ************************/
 if (!empty($usuarios_reg))
-{//si el contaminante esta registrado
-echo "<div id='msj' align='center' class='c'>Este contaminante ya está Registrado  <a onClick=\"newRecord('contaminante')\">Volver</a></div>";
+{//si el usuario esta registrado
+echo "<div id='msj' align='center' class='c'>Este usuario ya está Registrado  <a onClick=\"newRecord('usuario')\">Volver</a></div>";
 
 }
 else{
    $newReg = new conSqlInsert;
    
-	$registro = $newReg->new_Record($Tabla,$cols,$texto);
+	$registro = $newReg->new_Record($Tabla,$form->getColumnsName($ids),$texto);
  
 //header("location: ../vista/".$var.".php");
-echo "Registrado con Exito... <a href='../vista/".$var.".php'>Continuar</a>";
+echo "Registrado con Exito... <a href='../vista/".$var.".php?ids=".$ids."'>Continuar</a>";
 }
 }
 else{

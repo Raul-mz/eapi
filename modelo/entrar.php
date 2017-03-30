@@ -2,7 +2,7 @@
 
 <?php
 session_start();
-$var="estudiante";
+$var="admin";
 
 require_once("../class/class.consultas.php");
 $resultado = new conSqlSelect;
@@ -12,11 +12,11 @@ $id=$_POST["usuario"];
 
 
 /******************************/
- $r_Obt = $resultado->obtDoble("usuario","usuario","contrasena",$id,$opcion);
+ $r_Obt = $resultado->obtDoble("sgt_usuario","usuario","contrasena",$id,$opcion);
 
 /******************************/
 /* ************************/
-if (isset($r_Obt[0]['codigo']))
+if (isset($r_Obt[0]['usuario_id']))
 {//si el cliente esta registrado
  echo $contrasena = $r_Obt[0]["contrasena"];
   echo $idcliente = $r_Obt[0]["usuario"];				
