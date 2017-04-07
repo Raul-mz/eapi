@@ -1,5 +1,9 @@
 <?php
 require_once("../class/class.new.php");
+//require_once("../class/class.user.php");
+
+$user = User::getInstance();
+
 $resultado = new conSqlSelect;
 
  $pag="cargo"; 
@@ -33,8 +37,8 @@ $r_Obt = $resultado->obtResultadoW($tabla,$ID,$camp);
                                 <label for="exampleInputName2">Usuario: </label>
                               </td>
                               <td>
-                                  <input type="hidden" class="form-control" id="campo" value="<?php echo $r_Obt[0]['id_cargo']?>">
-                                  <input type="text" class="form-control" id="texto" placeholder="" value="<?php echo $r_Obt[0]['nombre']?>">
+                                  <input type="hidden" class="form-control" id="campo" value="<?php echo $user->getUserName(); ?>">
+                                  <input type="text" class="form-control" id="texto" placeholder="" value="<?php echo $user->getUserName();?>">
                               </td>
                         </tr>
                         <tr>
@@ -42,8 +46,7 @@ $r_Obt = $resultado->obtResultadoW($tabla,$ID,$camp);
                                 <label for="exampleInputName2">Email: </label>
                               </td>
                               <td>
-                                  <input type="hidden" class="form-control" id="campo" value="<?php echo $r_Obt[0]['id_cargo']?>">
-                                  <input type="text" class="form-control" id="texto" placeholder="" value="<?php echo $r_Obt[0]['nombre']?>">
+                                  <input type="text" class="form-control" id="texto" placeholder="" value="<?php echo $user->getEmail()?>">
                               </td>
                         </tr>
                         <tr>
@@ -51,8 +54,7 @@ $r_Obt = $resultado->obtResultadoW($tabla,$ID,$camp);
                                 <label for="exampleInputName2">Fecha: </label>
                               </td>
                               <td>
-                                  <input type="hidden" class="form-control" id="campo" value="<?php echo $r_Obt[0]['id_cargo']?>">
-                                  <input type="text" class="form-control" id="texto" placeholder="" value="<?php echo $r_Obt[0]['nombre']?>">
+                                  <input type="text" class="form-control" id="texto" placeholder="" value="<?php echo Date('d/m/Y');?>">
                               </td>  
                         </tr>
                         <tr>
@@ -61,7 +63,7 @@ $r_Obt = $resultado->obtResultadoW($tabla,$ID,$camp);
                               </td>
                               <td>
                                   <input type="hidden" class="form-control" id="campo" value="<?php echo $r_Obt[0]['id_cargo']?>">
-                                  <input type="text" class="form-control" id="texto" placeholder="" value="<?php echo $r_Obt[0]['nombre']?>">
+                                  <input type="text" class="form-control" id="texto" placeholder="" value="<?php echo Date('G:i')?>">
                               </td>
                         </tr>
                         <tr>
@@ -77,7 +79,11 @@ $r_Obt = $resultado->obtResultadoW($tabla,$ID,$camp);
                                 <label for="exampleInputName2">Prioridad: </label>
                               </td>
                               <td>
-                                  <select> <option>Media</option></select>
+                                  <select> 
+	                                  <option>Media</option>
+	                                  <option>Urgente</option>
+	                                  <option>Baja</option>
+                                  </select>
                               </td>
                         </tr>
                         <tr>
@@ -85,7 +91,12 @@ $r_Obt = $resultado->obtResultadoW($tabla,$ID,$camp);
                                 <label for="exampleInputName2">Tipo de Solicitud: </label>
                               </td>
                               <td> 
-                                  <select style="width: 95%;"> <option>Migración del Plan de Cuenta (Formato EXCEL)</option></select>
+                                  <select style="width: 95%;"> 
+                                  <?php $ticketType = $resultado->obtResultado('sgt_tipoticket'); 
+                                  foreach ($ticketType as $i => $value) {?>
+                                  <option value="<?php echo $value['tipoticket_id']; ?>"><?php echo $value['nombre']; ?></option></select>
+                                  
+                                  <?php } ?>
                               </td>
                               
                            <tr>

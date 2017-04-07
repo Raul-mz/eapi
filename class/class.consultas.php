@@ -4,12 +4,22 @@ require("../config/config.php");
 
 class conectorDB extends configuracion
 {
-	private $conexion;
+private static $conexion;
 		
 	public function __construct(){
 		$this->conexion = parent::conectar(); //variable con la conexión
 		return $this->conexion;										
 	}
+	
+	public static function getInstance()
+	{
+		if (  !self::$conexion instanceof self)
+		{
+			self::$conexion = new self;
+		}
+		return self::$conexion;
+	}
+	 
 	
 	public function consultarBD($consulta, $valores = array()){  //funcion principal, ejecuta todas las consultas
 		$resultado = false;
@@ -55,7 +65,7 @@ class conSqlUpdate
 		
 		$valores = null;
 		
-		$oConexion = new conectorDB; //instanciamos conector
+		$oConexion = conectorDB::getInstance(); //instanciamos conector
 		$registrar = $oConexion->consultarBD($consulta, $valores);
 		
 		if($registrar !== false){
@@ -68,21 +78,41 @@ class conSqlUpdate
 }
 class conSqlSelect
 {
-	private $resultado;
+	private static $resultado;
+	
+	public function __construct(){
+		
+	}
+	
+	public static function getInstance()
+	{
+		if (  !self::$resultado instanceof self)
+		{
+			self::$resultado = new self;
+		}
+		return self::$resultado;
+	}
 	
 	public function obtResultado($tabla){
 		$consulta = "SELECT * FROM $tabla";
 		$valores = null;
 		
-		$oConectar = new conectorDB; 
+		$oConectar = conectorDB::getInstance(); 
 		$this->resultado = $oConectar->consultarBD($consulta,$valores);
-        
+		$inicio = microtime(true);
+		
+		$this->resultado->free();
+		
+		printf("Tiempo total de consulta almacenada: %.6fs\n", microtime(true) - $inicio);
+		
 		return $this->resultado;
-	} 	public function obtResultadord($tabla,$dato){
+	} 	
+	
+	public function obtResultadord($tabla,$dato){
 		$consulta = "SELECT * FROM $tabla order by $dato";
 		$valores = null;
 		
-		$oConectar = new conectorDB; 
+		$oConectar = conectorDB::getInstance(); 
 		$this->resultado = $oConectar->consultarBD($consulta,$valores);
         
 		return $this->resultado;
@@ -92,7 +122,7 @@ class conSqlSelect
 		$consulta = "SELECT * FROM $tabla where '$col_id'='$text'";
 		$valores = null;
 		
-		$oConectar = new conectorDB; 
+		$oConectar = conectorDB::getInstance(); 
 		$this->resultado = $oConectar->consultarBD($consulta,$valores);
         
 		return $this->resultado;
@@ -102,7 +132,7 @@ class conSqlSelect
 		$consulta = "SELECT * FROM $tabla where $campo1='$text1' and $campo2='$text2'";
 		$valores = null;
 		
-		$oConectar = new conectorDB; 
+		$oConectar = conectorDB::getInstance(); 
 		$this->resultado = $oConectar->consultarBD($consulta,$valores);
         
 		return $this->resultado;
@@ -119,7 +149,7 @@ class conSqlDelete
 		
 		$valores = null;
 		
-		$oConexion = new conectorDB; //instanciamos conector
+		$oConexion = conectorDB::getInstance(); //instanciamos conector
 		$delete = $oConexion->consultarBD($consulta, $valores);
 		
 		if($delete !== false){
@@ -159,7 +189,7 @@ class conSqlInsert
 	
 	
 		
-		$oConexion = new conectorDB; //instanciamos conector
+		$oConexion = conectorDB::getInstance(); //instanciamos conector
 		$registrar = $oConexion->consultarBD($consulta, $matriz);
 		
 		if($registrar !== false){

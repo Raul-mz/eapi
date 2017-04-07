@@ -9,7 +9,7 @@ $pagName="solicitud";
             
               <div class="row">
                 <div class="col-sm-12" id="registro">
-                   <?php include 'c_'.$pagName.'.php';?>
+                   <?php include 'r_'.$pagName.'.php';?>
                 </div>
               
               

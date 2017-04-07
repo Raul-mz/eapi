@@ -4,12 +4,22 @@ require("../config/config.php");
 
 class conectorDB extends configuracion
 {
-	private $conexion;
+	private static $conexion;
 		
 	public function __construct(){
 		$this->conexion = parent::conectar(); //variable con la conexión
 		return $this->conexion;										
 	}
+	
+	public static function getInstance()
+	{
+		if (  !self::$conexion instanceof self)
+		{
+			self::$conexion = new self;
+		}
+		return self::$conexion;
+	}
+	 
 	
 	public function consultarBD($consulta, $valores = array()){  //funcion principal, ejecuta todas las consultas
 		$resultado = false;
@@ -26,7 +36,7 @@ class conectorDB extends configuracion
 					print_r($statement->errorInfo()); //imprimir errores
 				}
 				$resultado = $statement->fetchAll(PDO::FETCH_ASSOC); //si es una consulta que devuelve valores los guarda en un arreglo.
-				$statement->closeCursor();
+				
 			}
 			catch(PDOException $e){
 				echo "Error de ejecución: \n";
@@ -68,14 +78,29 @@ class conSqlUpdate
 }
 class conSqlSelect
 {
-	private $resultado;
+
+private static $resultado;
+	
+	public function __construct(){
+		
+	}
+	
+	public static function getInstance()
+	{
+		if (  !self::$resultado instanceof self)
+		{
+			self::$resultado = new self;
+		}
+		return self::$resultado;
+	}
 	public function obtResultado($tabla){
-		$consulta = "SELECT * FROM $tabla";
+		//mysqlnd_qc_set_is_select("is_select");
+		$consulta = "/*qc=on*/ SELECT * FROM $tabla";
 		$valores = null;
 		
 		$oConectar = new conectorDB; 
 		$this->resultado = $oConectar->consultarBD($consulta,$valores);
-        
+		
 		return $this->resultado;
 	}
 	public function obtColumna($tabla){
@@ -205,26 +230,4 @@ class conSqlInsert
 		}
     }
 
-}/// TERMINA CLASE USUARIOS ///
-function dameEstado(){
-    $resultado = false;
-    $consulta = "SELECT * FROM estados";
- 
-    $conexion = conectaBaseDatos();
-    $sentencia = $conexion->prepare($consulta);
- 
-    try {
-        if(!$sentencia->execute()){
-            print_r($sentencia->errorInfo());
-        }
-        $resultado = $sentencia->fetchAll();
-        //$resultado = $sentencia->fetchAll(PDO::FETCH_ASSOC);
-        $sentencia->closeCursor();
-    }
-    catch(PDOException $e){
-        echo "Error al ejecutar la sentencia: \n";
-            print_r($e->getMessage());
-    }
- 
-    return $resultado;
 }

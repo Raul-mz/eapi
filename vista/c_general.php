@@ -1,16 +1,13 @@
-<?php require_once("../class/class.new.php");
-require_once("../class/class.perfil.php");
-
-/* Para consultar cliente */
-$resultado = new conSqlSelect;
-
-$tabla=$_REQUEST['ids'];
-$pag="general";
+<?php 
+$inicio = microtime(true);
 $perfil = new Table($resultado,$tabla);
-//$perfil->create($resultado);
+
 $columID=$perfil->getColumnID($tabla)->getColumnName();
 
 $r_Obt = $resultado->obtResultado($perfil->getTabla());
+
+
+
 ?>
 <p>&nbsp; </p>
     
@@ -75,3 +72,5 @@ $r_Obt = $resultado->obtResultado($perfil->getTabla());
             
 
 </div>
+<?php printf("Tiempo total de consulta: %.6fs\n", microtime(true) - $inicio);
+?>
