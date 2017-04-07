@@ -1,0 +1,4 @@
+RewriteEngine On
+#RewriteRule    ^admin/([0-9]+)/?$    vista/general.php?ids=$1    [NC,L]    # Handle product requests
+RewriteRule ^admin/general/(\w+)$ /vista/general.php?ids=$1
+#RewriteRule    ^admin/admin    vista/admin.php    [NC,L]    # Handle product requests

@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Servidor: localhost
--- Tiempo de generación: 30-03-2017 a las 22:59:10
+-- Tiempo de generación: 07-04-2017 a las 22:36:33
 -- Versión del servidor: 10.1.19-MariaDB
 -- Versión de PHP: 5.6.24
 
@@ -65,12 +65,12 @@ CREATE TABLE `sgt_field` (
 --
 
 INSERT INTO `sgt_field` (`field_id`, `menu_id`, `columnName`, `name`, `type`, `reference`, `value`, `sequence`, `isDisplay`, `isMandatory`, `isSameLine`, `isReadOnly`, `isPrimaryKey`) VALUES
-(1, 1, 'perfil_id', 'Cod. Perfil', 1, '', '', 1, 1, 1, 0, 1, 1),
-(2, 1, 'fecha_alta', 'Fecha de Alta', 5, '', '#toDay', 2, 1, 1, 1, 0, 0),
-(3, 1, 'nombre', 'Nombre', 1, '', '', 3, 1, 1, 0, 0, 0),
-(4, 1, 'descripcion', 'Descripción', 1, '', '', 4, 1, 0, 0, 0, 0),
-(5, 1, 'fecha_baja', 'Fecha de Baja', 5, '', '', 5, 1, 0, 0, 1, 0),
-(6, 1, 'activo', 'Activo', 4, '', 'checked', 6, 1, 0, 1, 0, 0),
+(1, 7, 'perfil_id', 'Cod. Perfil', 1, '', '', 1, 1, 1, 0, 1, 1),
+(2, 7, 'fecha_alta', 'Fecha de Alta', 5, '', '#toDay', 2, 1, 1, 1, 0, 0),
+(3, 7, 'nombre', 'Nombre', 1, '', '', 3, 1, 1, 0, 0, 0),
+(4, 7, 'descripcion', 'Descripción', 1, '', '', 4, 1, 0, 0, 0, 0),
+(5, 7, 'fecha_baja', 'Fecha de Baja', 5, '', '', 5, 1, 0, 0, 1, 0),
+(6, 7, 'activo', 'Activo', 4, '', 'checked', 6, 1, 0, 1, 0, 0),
 (7, 2, 'plantilla_id', 'Cod. Plantilla', 1, '', '', 0, 1, 0, 0, 1, 1),
 (8, 2, 'fecha_alta', 'Fecha de Alta', 5, '', '#toDay', 1, 1, 1, 1, 0, 0),
 (9, 2, 'nombre', 'Nombre', 1, '', '', 2, 1, 1, 0, 0, 0),
@@ -111,21 +111,27 @@ INSERT INTO `sgt_field` (`field_id`, `menu_id`, `columnName`, `name`, `type`, `r
 
 CREATE TABLE `sgt_menu` (
   `menu_id` int(10) NOT NULL,
+  `submenu_id` int(2) NOT NULL DEFAULT '0',
   `tabla` varchar(20) NOT NULL,
   `titulo` varchar(40) NOT NULL,
-  `secuencia` int(11) NOT NULL
+  `secuencia` int(11) NOT NULL,
+  `isAgent` int(1) NOT NULL DEFAULT '1',
+  `isSpecial` int(1) NOT NULL DEFAULT '0'
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `sgt_menu`
 --
 
-INSERT INTO `sgt_menu` (`menu_id`, `tabla`, `titulo`, `secuencia`) VALUES
-(1, 'sgt_perfil', 'Perfil', 1),
-(2, 'sgt_plantilla', 'Plantilla', 2),
-(3, 'sgt_tipoticket', 'Tipo de Ticket', 3),
-(4, 'sgt_empresa', 'Empresa', 4),
-(5, 'sgt_usuario', 'Usuario', 4);
+INSERT INTO `sgt_menu` (`menu_id`, `submenu_id`, `tabla`, `titulo`, `secuencia`, `isAgent`, `isSpecial`) VALUES
+(1, 0, '', 'Gestionar', 1, 1, 0),
+(2, 0, 'sgt_plantilla', 'Plantilla', 2, 1, 0),
+(3, 0, 'sgt_tipoticket', 'Tipo de Ticket', 3, 1, 0),
+(4, 1, 'sgt_empresa', 'Empresa', 4, 1, 0),
+(5, 0, 'sgt_usuario', 'Usuario', 4, 1, 0),
+(6, 1, 'sgt_permisos', 'Permisos', 1, 1, 0),
+(7, 0, 'sgt_perfil', 'Perfil', 1, 1, 0),
+(8, 0, 'solicitud', 'Solicitud', 1, 0, 1);
 
 -- --------------------------------------------------------
 
@@ -172,7 +178,8 @@ CREATE TABLE `sgt_plantilla` (
 
 INSERT INTO `sgt_plantilla` (`plantilla_id`, `fecha_alta`, `nombre`, `descripcion`, `modelo`, `fecha_baja`, `activo`) VALUES
 (1, '2017-03-22 03:41:32', 'Plantilla Prueba', 'Prueba', 'xls', '0000-00-00 00:00:00', 1),
-(5, '0000-00-00 00:00:00', 'ds', 'asd', 'ds', '0000-00-00 00:00:00', 0);
+(5, '0000-00-00 00:00:00', 'ds', 'asd', 'ds', '0000-00-00 00:00:00', 0),
+(7, '2017-03-31 04:00:00', 'a', 'a', 'a', '0000-00-00 00:00:00', 1);
 
 -- --------------------------------------------------------
 
@@ -212,15 +219,17 @@ CREATE TABLE `sgt_usuario` (
   `apellido` varchar(20) NOT NULL,
   `usuario` varchar(20) NOT NULL,
   `contrasena` varchar(20) NOT NULL,
-  `agente` int(1) NOT NULL DEFAULT '0'
+  `agente` int(1) NOT NULL DEFAULT '0',
+  `email` varchar(30) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Volcado de datos para la tabla `sgt_usuario`
 --
 
-INSERT INTO `sgt_usuario` (`usuario_id`, `fecha_alta`, `nombre`, `apellido`, `usuario`, `contrasena`, `agente`) VALUES
-(1, '2017-03-30 04:00:00', 'test', 'test', 'test', 'test', 1);
+INSERT INTO `sgt_usuario` (`usuario_id`, `fecha_alta`, `nombre`, `apellido`, `usuario`, `contrasena`, `agente`, `email`) VALUES
+(1, '2017-03-30 04:00:00', 'test', 'test', 'test', 'test', 1, ''),
+(2, '2017-04-07 16:04:27', 'client', 'client', 'client', 'client', 0, 'test@test.com');
 
 --
 -- Índices para tablas volcadas
@@ -286,7 +295,7 @@ ALTER TABLE `sgt_field`
 -- AUTO_INCREMENT de la tabla `sgt_menu`
 --
 ALTER TABLE `sgt_menu`
-  MODIFY `menu_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `menu_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 --
 -- AUTO_INCREMENT de la tabla `sgt_perfil`
 --
@@ -296,7 +305,7 @@ ALTER TABLE `sgt_perfil`
 -- AUTO_INCREMENT de la tabla `sgt_plantilla`
 --
 ALTER TABLE `sgt_plantilla`
-  MODIFY `plantilla_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `plantilla_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT de la tabla `sgt_tipoticket`
 --
@@ -306,7 +315,7 @@ ALTER TABLE `sgt_tipoticket`
 -- AUTO_INCREMENT de la tabla `sgt_usuario`
 --
 ALTER TABLE `sgt_usuario`
-  MODIFY `usuario_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `usuario_id` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
